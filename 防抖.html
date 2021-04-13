@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<button id="btm1">开始</button>
+
+<body>
+    <script>
+        function debounce(fn, delay) {
+            // 利用闭包保存定时器
+            let timer = null
+            return function () {
+                // 在规定时间内再次触发会先清除定时器后再重设定时器
+                clearTimeout(timer)
+                timer = setTimeout(() => {
+                    fn.apply(this, arguments)
+                }, delay)
+            }
+        }
+        function fn() {
+            console.log('防抖')
+        }
+        document.getElementById('btm1').addEventListener('click', debounce(fn, 1000))
+    </script>
+</body>
+
+</html>

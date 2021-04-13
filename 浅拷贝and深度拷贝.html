@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 浅拷贝 ... -->
+    <script>
+        let obj1 = { x: 1, y: { yy: 3 }, z: [5] };
+        let copy1 = { ...obj1 };
+        obj1.x = 2;
+        obj1.y.yy = 4;
+        obj1.z[0] = 6;
+        console.log(copy1)//{x: 1, y: {yy:4}, z: [6]}
+    </script>
+    <!-- 浅拷贝 Object.assign -->
+    <script>
+        let obj2 = { x: 1, y: { yy: 3 }, z: [5] };
+        let copy2 = {};
+        Object.assign(copy2, obj2)
+        obj2.x = 2;
+        obj2.y.yy = 4;
+        obj2.z[0] = 6;
+        console.log(copy2)//{x: 1, y: {yy:4}, z: [6]}  如果obj2的属性是引用类型，则是浅拷贝，对于非引用类型是深拷贝
+    </script>
+    <!-- 深拷贝  JSON.parse/JSON.stringify-->
+    <script>
+        let obj3 = { x: 1, y: { yy: 3 }, z: [5] };
+        let copy3 = JSON.parse(JSON.stringify(obj3));
+        obj3.x = 2;
+        obj3.y.yy = 4;
+        obj3.z[0] = 6;
+        console.log(copy3)//{x: 1, y: {yy:3}, z: [5]}
+    </script>
+    <!-- 深拷贝  递归方法-->
+    <script>
+        // let aaa = {a:1}
+        // aaa.__proto__={c:2}
+        // for(let i in aaa){console.log(i)}//a c
+        function deepClone(obj) {
+            if (typeof obj !== 'object')
+                return obj
+            let copy = obj instanceof Array ? [] : {}
+            for (let i in obj) {
+                if (obj.hasOwnProperty(i)) {
+                    copy[i] = arguments.callee(obj[i])
+                }
+            }
+            return copy
+        }
+        let obj4 = { x: 1, y: { yy: 3 }, z: [5] };
+        let copy4 = deepClone(obj4);
+        obj4.x = 2;
+        obj4.y.yy = 4;
+        obj4.z[0] = 6;
+        console.log(copy4)//{x: 1, y: {yy:3}, z: [5]}
+    </script>
+</body>
+
+</html>

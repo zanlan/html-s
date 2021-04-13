@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        class Promise {
+            constructor(f) {
+                // 三个状态
+                this.state = 'pending'
+                this.value = ""
+                this.reason = ""
+                let resolve = value => {
+                    if (this.state === 'pending') {
+                        this.state = 'fulfilled'
+                        this.value = value
+                    }
+                }
+                let reject = value => {
+                    if (this.state === 'pending') {
+                        this.state = 'rejected'
+                        this.reason = value
+                    }
+                }
+                // 自动执行函数
+                try {
+                    f(resolve, reject)
+                } catch (e) {
+                    reject(e)
+                }
+            }
+            // then
+            then(onFulfilled, onRejected) {
+                switch (this.state) {
+                    case 'fulfilled':
+                        onFulfilled(this.value)
+                        break
+                    case 'rejected':
+                        onRejected(this.reason)
+                        break
+                    default:
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

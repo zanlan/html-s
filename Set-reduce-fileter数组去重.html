@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- Set去重 -->
+    <script>
+        (function(){
+            let arr = [1,2,3,2,4,3,5,7,5,7];
+            let copy = Array.from(new Set(arr));
+            console.log(arr)//[1,2,3,2,4,3,5,7,5,7];
+            console.log(copy)//[1, 2, 3, 4, 5, 7];
+        })()
+    </script>
+    <!-- reduce去重 -->
+    <script>
+        (function(){
+            let arr = [1,2,3,2,4,3,5,7,5,7];
+            let copy = arr.reduce(function(iterator,item){
+                if(!iterator.includes(item)){
+                    iterator.push(item)
+                }
+                return iterator;
+            },[])
+            console.log(arr)//[1,2,3,2,4,3,5,7,5,7];
+            console.log(copy)//[1, 2, 3, 4, 5, 7];
+        })()
+    </script>
+    <!-- filter去重 -->
+    <script>
+        (function(){
+            let arr = [1,2,3,2,4,3,5,7,5,7];
+            let copy = arr.filter(function(item,index){
+               return arr.indexOf(item) === index;
+            },[])
+            console.log(arr)//[1,2,3,2,4,3,5,7,5,7];
+            console.log(copy)//[1, 2, 3, 4, 5, 7];
+        })()
+    </script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        (function (params) {
+            Promise.myall = function (promises) {
+                let results = [];
+                let promiseCount = 0;
+                let promisesLength = promises.length;
+                return new Promise(function (resolve, reject) {
+                    for (let val of promises) {
+                        Promise.resolve(val).then(function (res) {
+                            promiseCount++;
+                            results.push(res);
+                            // 当所有函数都正确执行了，resolve输出所有返回结果。
+                            if (promiseCount === promisesLength) {
+                                return resolve(results);
+                            }
+                        }, function (err) {
+                            return reject(err);
+                        });
+                    }
+                });
+            };
+
+            let promise1 = new Promise(function (resolve) {
+                resolve(1);
+            });
+            let promise2 = new Promise(function (resolve) {
+                resolve(2);
+            });
+            let promise3 = new Promise(function (resolve) {
+                resolve(3);
+            });
+
+            let promiseAll = Promise.myall([promise1, promise2, promise3]);
+            promiseAll.then(function (res) {
+                console.log(res);
+            });
+        })()
+    </script>
+    <!-- 
+Promise.race方法同样是将多个Promise实例，包装成一个新的Promise实例。
+var p = Promise.race([p1,p2,p3]);
+上面代码中，只要p1、p2、p3之中有一个实例率先改变状态，p的状态就跟着改变。那个率先改变的Promise实例的返回值，就传递给p的回调函数。
+如果Promise.all方法和Promise.race方法的参数，不是Promise实例，就会先调用下面讲到的Promise.resolve方法，将参数转为Promise实例，再进一步处理。
+     -->
+    <script>
+            (function () {
+                Promise.myrace = function (promises) {
+                    return new Promise(function (resolve, reject) {
+                        for (let val of promises) {
+                            Promise.resolve(val).then(function (res) {
+                                resolve(res);
+                            }, function (err) {
+                                reject(err);
+                            });
+                        }
+                    });
+                };
+
+                let promise1 = new Promise(function (resolve, reject) {
+                    setTimeout(function () {
+                        resolve(1)
+                    }, 1000)
+                });
+                let promise2 = new Promise(function (resolve, reject) {
+                    setTimeout(function () {
+                        reject(2)
+                    }, 2000)
+                });
+                let promise3 = new Promise(function (resolve, reject) {
+                    setTimeout(function () {
+                        reject(3)
+                    }, 1000)
+                });
+
+                let promiseAll = Promise.myrace([promise1, promise2, promise3]);
+                promiseAll.then(function (res) {
+                    console.log(res);
+                });
+            })()
+    </script>
+</body>
+
+</html>

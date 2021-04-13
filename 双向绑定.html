@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text" id="input">
+    <span id="span"></span>
+    <!-- 数据驱动 -->
+    <script>
+        let obj = {}
+        let input = document.getElementById('input')
+        let span = document.getElementById('span')
+        // 数据劫持
+        Object.defineProperty(obj, 'text', {
+            configurable: true,
+            enumerable: true,
+            set(newVal) {
+                console.log(input.value)
+                span.innerHTML = newVal
+            }
+        })
+        // 输入监听  input 可以动态修改input.value值 只要监控到obj.text，就通知
+        input.addEventListener('input', function (e) {
+            obj.text = e.target.value
+        })
+    </script>
+    <!-- 直接操作dom -->
+    <!-- <script>
+        let obj = {}
+        let input = document.getElementById('input')
+        let span = document.getElementById('span')
+        input.addEventListener('input', function (e) {
+            span.innerHTML = e.target.value
+        })
+    </script> -->
+</body>
+
+</html>

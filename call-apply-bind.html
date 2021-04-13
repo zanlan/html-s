@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 例如 f.call(obj,1,2)
+        // f是函数，函数调用Function.prototype上的mycall方法
+        // mycall内的this指向实例化对象f
+        Function.prototype.mycall = function (obj) {
+            if (typeof this !== 'function') {
+                throw new TypeError('not funciton')
+            }
+            obj = obj || window
+            obj.fn = this//将f赋值给obj下的fn，这样f函数内的this指向的就是obj
+            let arg = [...arguments].slice(1)
+            let result = obj.fn(...arg)
+            delete obj.fn
+            return result
+        }
+    </script>
+    <script>
+        // 思路：将要改变this指向的方法挂到目标this上执行并返回
+        Function.prototype.myapply = function (context) {
+            if (typeof this !== 'function') {
+                throw new TypeError('not funciton')
+            }
+            context = context || window
+            context.fn = this
+            let result
+            // 如果arguments[1]为空值，用...则会报错，所以之类要判断一下
+            if (arguments[1]) {
+                result = context.fn(...arguments[1])
+            } else {
+                result = context.fn()
+            }
+            delete context.fn
+            return result
+        }
+    </script>
+    <script>
+        // 思路：类似call，但返回的是函数
+        Function.prototype.mybind = function (context) {
+            if (typeof this !== 'function') {
+                throw new TypeError('Error')
+            }
+            let f = this
+            let arguments11 = [...arguments].slice(1)
+            return function F() {
+                // 二次调用的函数，可能使用new调用，所以判断一下
+                // 参数也是分两次传入  第一次是arguments11 第二次是arguments
+                if (this instanceof F) {
+                    return new f(...arguments11, ...arguments)
+                } else {
+                    return f.apply(context, arguments11.concat(...arguments))
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

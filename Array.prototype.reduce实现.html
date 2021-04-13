@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        Array.prototype.myreduce = function (fn, initialValue) {
+            // 判断调用对象是否为数组
+            if (Object.prototype.toString.call(initialValue) !== '[object Array]') {
+                throw new TypeError('not a array')
+            }
+            // 判断调用数组是否为空数组
+            const sourceArray = this
+            if (sourceArray.length === 0) {
+                throw new TypeError('empty array')
+            }
+            // 判断传入的第一个参数是否为函数
+            if (typeof fn !== 'function') {
+                throw new TypeError(`${fn} is not a function`)
+            }
+
+            // 第二步
+            // 回调函数参数初始化
+            let accumulator,
+                currentValue,
+                currentIndex;
+            if (initialValue) {
+                accumulator = initialValue
+                currentIndex = 0
+            } else {
+                accumulator = arr[0]
+                currentIndex = 1
+            }
+            while (currentIndex < sourceArray.length) {
+                if (Object.prototype.hasOwnProperty.call(sourceArray, currentIndex)) {
+                    currentValue = sourceArray[currentIndex]
+                    accumulator = fn(accumulator, currentValue, currentIndex, sourceArray)
+                }
+
+                currentIndex++
+            }
+            return accumulator
+        }
+    </script>
+</body>
+
+</html>

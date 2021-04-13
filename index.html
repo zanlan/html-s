@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- get请求 -->
+    <script>
+        (function () {
+            let xhr = new XMLHttpRequest()
+            // 初始化
+            xhr.open('get', "http://localhost:3000/get?name=1&age=2", true)
+            // 发送请求
+            xhr.onreadystatechange = function () { // 状态发生变化时，函数被回调
+                if (xhr.readyState === 4) { // 成功完成
+                    // 判断响应结果:
+                    if (xhr.status === 200) {
+                        // 成功，通过responseText拿到响应的文本:
+                        console.log(xhr.responseText)
+                    } else {
+                        // 失败，根据响应码判断失败原因:
+                        console.log(xhr.status)
+                    }
+                } else {
+                    // HTTP请求还在继续...
+                }
+            }
+            xhr.send(null)
+        })()
+    </script>
+    <!-- post请求 -->
+    <script>
+            (function () {
+                let xhr = new XMLHttpRequest()
+                // 初始化
+                xhr.open('post', "http://localhost:3000/post", true)
+                // 发送请求
+                xhr.setRequestHeader('content-Type', 'application/x-www-form-urlencoded')
+                xhr.onreadystatechange = function () { // 状态发生变化时，函数被回调
+                    if (xhr.readyState === 4) { // 成功完成
+                        // 判断响应结果:
+                        if (xhr.status === 200) {
+                            // 成功，通过responseText拿到响应的文本:
+                            console.log(xhr.responseText)
+                        } else {
+                            // 失败，根据响应码判断失败原因:
+                            console.log(xhr.status)
+                        }
+
+                    } else {
+                        // HTTP请求还在继续...
+                    }
+                }
+                xhr.send('name=1&age=2')
+            })()
+    </script>
+    <!-- 用promise封装ajax -->
+    <script>
+        let axios = {
+            get(url, data) {
+                return new Promise(function (resolve, reject) {
+                    let xhr = new XMLHttpRequest();
+                    let query = '';
+                    let flag = typeof data === 'object' && !Array.isArray(data)
+                    let keys = Object.keys(data);
+                    if (flag && keys.length > 0) {
+                        query = '?'
+                        keys.forEach((key) => {
+                            query += `${key}=${data[key]}&`;
+                        })
+                        query = query.slice(0, query.length - 1);
+                    }
+                    xhr.open('get', url + query, true);
+                    xhr.send(null)
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4) { // 成功完成
+                            if (xhr.status === 200) {
+                                resolve(xhr.responseText)
+                            } else {
+                                reject(xhr.status)
+                            }
+                        } else {
+                            // HTTP请求还在继续...
+                        }
+                    }
+                })
+            },
+            post(url,data){
+                return new Promise(function (resolve, reject) {
+                    let xhr = new XMLHttpRequest();
+                    let query = null;
+                    let flag = typeof data === 'object' && !Array.isArray(data)
+                    let keys = Object.keys(data);
+                    if (flag && keys.length > 0) {
+                        query = '';
+                        keys.forEach((key) => {
+                            query += `${key}=${data[key]}&`;
+                        })
+                        query = query.slice(0, query.length - 1);
+                    }
+                    xhr.open('post', url, true);
+                    xhr.setRequestHeader('content-Type', 'application/x-www-form-urlencoded')
+                    xhr.send(query)
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4) { // 成功完成
+                            if (xhr.status === 200) {
+                                resolve(xhr.responseText)
+                            } else {
+                                reject(xhr.status)
+                            }
+                        } else {
+                            // HTTP请求还在继续...
+                        }
+                    }
+                })
+            }
+        }
+        axios.get('http://localhost:3000/get', { name: 1, age: 2 }).then(res => {
+            console.log(res);
+        })
+        axios.post('http://localhost:3000/post', { name: 1, age: 2 }).then(res => {
+            console.log(res);
+        })
+    </script>
+</body>
+
+</html>

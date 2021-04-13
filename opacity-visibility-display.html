@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .div1 {
+            opacity: 0;
+        }
+
+        .div1 div {
+            opacity: 1;
+        }
+
+        .div2 {
+            visibility: hidden;
+        }
+
+        .div2 div {
+            visibility: visible;
+        }
+
+        .div3 {
+            display: none;
+        }
+    </style>
+</head>
+<!-- 
+    display: none;
+        浏览器不会渲染 display:none; 的元素，不占据空间
+        性能：动态改变此属性时，会引起重排，性能较差
+        继承：不会被子元素继承，因为子元素也不会被渲染
+        transition过渡：transition不支持display
+    visibility: hidden;
+        元素隐藏并占据空间
+        重绘
+        继承：会继承，子元素能取消隐藏 （visibility: visible）
+        支持过渡transition
+    opacity: 0;
+        元素隐藏并占据空间
+        可监听DOM事件
+        不重绘
+        继承：会继承，子元素不能取消隐藏
+        支持过渡transition
+ -->
+ 
+<body>
+    <div class="div1"> 1
+        <div>问我</div>
+    </div>
+    <div class="div2"> 2
+        <div>问我</div>
+    </div>
+    <div class="div3"> 3 
+        <div>问我</div>
+    </div>
+</body>
+
+</html>
