@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        .boss{
+            width: 700px;
+            height: 1450px;
+            border: 1px solid red;
+        }
+        .name {
+            color: #24272e;
+            height: 33px;
+            line-height: 33px;
+            font-size: 24px;
+            font-weight: 500;
+        }
+        .content1{
+            display: flex;
+            margin-bottom: 10px;
+            margin-top: 20px;
+        }
+        .content2{
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .content3{
+            display: flex;
+        }
+        .message{
+            padding: 0 10px;
+            line-height: 20px;
+            height: 20px;
+            position: relative;
+        }
+        .message::after{
+            content: '';
+            width: 1px;
+            height: 10px;
+            background: #e0e0e0;
+            position: absolute;
+            top: 5px;
+            right: 0;
+        }
+        .message:first-child{
+            padding-left: 0;
+        }
+        .content1 .message:nth-of-type(3)::after{
+            height: 0;
+        }
+        .content2 .message:nth-of-type(4)::after{
+            height: 0;
+        }
+        .content3 .message:nth-of-type(4)::after{
+            height: 0;
+        }
+        .message img{
+            width: 14px;
+            height: 14px;
+            margin-right:10px;
+            float: left;
+            vertical-align: middle;
+            margin-top: 3px;
+        }
+        .message span{
+            font-size: 14px;
+            color: #414a60;
+            float: left;
+        }
+        .person-power{
+            position: relative;
+            padding-left: 10px;
+            margin-bottom: 30px;
+        }
+        .person-power::after{
+            content: "";
+            position: absolute;
+            width: 3px;
+            height: 15px;
+            border-radius: 2px;
+            background-color: #53cac3;
+            left: 0;
+            top: 5px;
+        }
+        .person-power .title{
+            font-size: 18px;
+            height: 25px;
+            line-height: 25px;
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+        .person-power .title2{
+            font-size: 18px;
+            height: 25px;
+            line-height: 25px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #414a60;
+        }
+        .person-power .title2 span{
+            font-size: 12px;
+            padding-left: 30px;
+            color: #9fa3b0;
+        }
+        .person-power .title3{
+            margin-bottom: 20px;
+            color: #61687c;
+            font-size: 15px;
+            font-weight: 700;
+        }
+        .person-power .title4{
+            margin-bottom: 20px;
+            color: #61687c;
+            display: flex;
+            justify-content: flex-start;
+        }
+        .person-power .title4 .title44{
+            width: 50px;
+            font-weight: 700;
+        }
+        .person-power .content{
+            padding-left: 7px;
+            color: #61687c;
+            font-size: 14px;
+            color: #414a60;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="boss">
+        <div class="name">张亮</div>
+        <div class="content1">
+            <div class="message">
+                <img src="./images/work.png" alt="" srcset="">
+                <span>3年经验</span>
+            </div>
+            <div class="message">
+                <img src="./images/work.png" alt="" srcset="">
+                <span>本科</span>
+            </div>
+            <div class="message">
+                <img src="./images/work.png" alt="" srcset="">
+                <span>在职-考虑机会</span>
+            </div>
+        </div>
+        <div class="content2">
+            <div class="message">
+                <img src="./images/work.png" alt="" srcset="">
+                <span>2018-06</span>
+            </div>
+            <div class="message">
+                <img src="./images/work.png" alt="" srcset="">
+                <span>15071228084</span>
+            </div>
+            <div class="message">
+                <img src="./images/work.png" alt="" srcset="">
+                <span>15071228084</span>
+            </div>
+            <div class="message">
+                <img src="./images/work.png" alt="" srcset="">
+                <span>zanlan123@163.com</span>
+            </div>
+        </div>
+        <div class="person-power">
+            <div class="title">
+                期望职位
+            </div>
+            <div class="content3">
+                <div class="message">
+                    <img src="./images/work.png" alt="" srcset="">
+                    <span>web前端</span>
+                </div>
+                <div class="message">
+                    <img src="./images/work.png" alt="" srcset="">
+                    <span>20-25k</span>
+                </div>
+                <div class="message">
+                    <img src="./images/work.png" alt="" srcset="">
+                    <span>互联网</span>
+                </div>
+                <div class="message">
+                    <img src="./images/work.png" alt="" srcset="">
+                    <span>深圳</span>
+                </div>
+            </div>
+        </div>
+        <div class="person-power">
+            <div class="title">
+                个人优势
+            </div>
+            <div class="content">1、熟练掌握es5/es6，jquery，vue，element-ui</div>
+            <div class="content">2、熟悉react，状态管理react-redux，antd-mobile组件库。</div>
+            <div class="content">3、了解vue底层原理，性能优化，网页安全，eslint，react-native，node.js。</div>
+            <div class="content">4、会运用git，webpack，lottie复杂动画，qiankun微服务。</div>
+        </div>
+        <div class="person-power">
+            <div class="title">
+                工作经历
+            </div>
+            <div class="title2">
+                深圳证券信息技术有限公司
+                <span>2018.03-2021.03</span>
+            </div>
+            <div class="title3">
+                web前端
+            </div>
+            <div class="title4">
+                <div class="title44">内容：</div>
+                <div class="title4-content">
+                    <div class="content">1、熟练掌握es5/es6，jquery，vue，element-ui</div>
+                    <div class="content">2、熟悉react，状态管理react-redux，antd-mobile组件库。</div>
+                    <div class="content">3、了解vue底层原理，性能优化，网页安全，eslint，react-native，node.js。</div>
+                    <div class="content">4、会运用git，webpack，lottie复杂动画，qiankun微服务。</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
