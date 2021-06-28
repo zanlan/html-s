@@ -1,26 +1,626 @@
 https://www.lodashjs.com
 
-# 数学
-_.random([lower=0], [upper=1], [floating:Boolean])
+# 数组 集合 函数 语言 数学 数字 对象 Seq 字符串 使用函数
+# 1 数组
+# 1-1 chunk
+_.chunk(Array, n=1)  --- 将数组（Array）拆分成多个 size 长度的区块，并将这些区块组成一个新数组。 如果Array 无法被分割成全部等长的区块，那么最后剩余的元素将组成一个区块。
+    _.chunk([],1)  => []
+    _.chunk([1,2,3,4,5],2)  => [ [ 1, 2 ], [ 3 , 4 ], [ 5 ] ]
 
-_.ceil(1632.2135323, [+-2])   floor   round
+# 1-2 compact
+_.compact(Array)  --- 创建一个新数组，包含原数组中所有的非假值元素。例如false, null,0, "", undefined, 和 NaN 都是被认为是“假值”。
+    _.compact([0, 1, false, 2, '', 3])  => [1, 2, 3]
 
-add加 subtract减  multiply乘 divide除 sum和 max  min  mean平均值
+# 1-3 concat
+    _.concat(Array)  --- 创建一个新数组，将Array与任何数组 或 值连接在一起。
+    _.concat(1, 2, [3], [ [4] ])  => [1, 2, 3, [4]]
+    
+# 1-4 difference
+    _.difference(Array, [values])
+    创建一个具有唯一Array值的数组，每个值不包含在其他给定的数组中。（注：即创建一个新数组，这个数组中的值，为第一个数字（Array 参数）排除了给定数组中的值。）该方法使用SameValueZero做相等比较。结果值的顺序是由第一个数组中的顺序确定。
 
-maxBy minBy  meanBy  sumBy
-_.sumBy(objects, function(o) { return o.n; }) <==>  _.sumBy(objects, 'n')
+   _.difference([3, 2, 1, [5]], [4, 2, [5]])  => [3, 1, [5]]
 
-# 语言
-castArray clone  cloneDeep  eq gt gte lt lte  isArguments  isArray isArrayBuffer isArrayLike('abc') 
-isArrayLikeObject('abc') isBoolean  isBuffer isDate isElement isEmpty  isError isFinite isFunction
-isInteger isLength isNaN isNative  isMap isSet isWeakMap isWeakSet isUndefined[检测undefined]
-isNil[检测undefined/null]  isNull[检测null] isNumber[检测数字] isObject[检测对象-除开null] isPlainObject[检测普通对象]
-isRegExp[检测正则]  isSafeInteger  isString isSymbol isTypedArray 
-toArray toFinite toInteger toLength toNumber
+# 1-5 differenceBy
+    _.differenceBy(Array, [values], [iteratee=_.identity])
+    这个方法类似_.difference ，除了它接受一个 iteratee （注：迭代器）， 调用Array 和 values 中的每个元素以产生比较的标准。 结果值是从第一数组中选择。iteratee 会调用一个参数：(value)。（注：首先使用迭代器分别迭代Array 和 values中的每个元素，返回的值作为比较值）。
 
-isMatch({ 'a': 1, 'b': 2 }, { 'b': 2 })
-isMatchWith({'b': 2}, {'b': 1}, (item1,item2)=>{<!-- item1为2 item2为1 -->})
+    _.differenceBy([3.1, 2.2, 1.3], [4.4, 2.5], Math.floor)
 
-isEqual({}, {})
-_.isEqualWith([], [], (item1,item2)=>{return true}) <!-- 参数为  1、数组是每一项   2、对象就是自己 -->
-conformsTo({ 'b': 2 }, { b(n) { return n > 1 } })
+# 1-6 differenceWith
+    _.differenceWith(Array, [values], [comparator])
+   这个方法类似_.difference ，除了它接受一个 comparator （注：比较器），它调用比较array，values中的元素。 结果值是从第一数组中选择。comparator 调用参数有两个：(arrVal, othVal)
+
+   var objects = [{ 'x': 1, 'y': 2 }, { 'x': 2, 'y': 1 }];
+ 
+    _.differenceWith(objects, [{ 'x': 1, 'y': 2 }], _.isEqual);
+    // => [{ 'x': 2, 'y': 1 }]
+
+<!--
+    _.isEqual(value, other)
+    执行深比较来确定两者的值是否相等。
+    **注意: **这个方法支持比较 arrays, array buffers, booleans, date objects, error objects, maps, numbers, Object objects, regexes, sets, strings, symbols, 以及 typed arrays. Object 对象值比较自身的属性，不包括继承的和可枚举的属性。 不支持函数和DOM节点比较。
+    _.isEqual({a:1,b:[1,{c:1}]}, {a:1,b:[1,{c:1}]});  => true 
+-->
+
+
+# 1-7 drop
+    _.drop(array, [n=1])    
+   创建一个切片数组，去除array前面的n个元素。（n默认值为1。）
+   
+    _.drop([1, 2, 3]);
+    // => [2, 3]
+    
+    _.drop([1, 2, 3], 2);
+    // => [3]
+    
+    _.drop([1, 2, 3], 5);
+    // => []
+    
+    _.drop([1, 2, 3], 0);
+    // => [1, 2, 3]
+
+# 1-8 dropRight
+    _.dropRight(array, [n=1])
+    创建一个切片数组，去除array尾部的n个元素。（n默认值为1。）
+   
+    _.dropRight([1, 2, 3]);
+    // => [1, 2]
+    
+    _.dropRight([1, 2, 3], 2);
+    // => [1]
+    
+    _.dropRight([1, 2, 3], 5);
+    // => []
+    
+    _.dropRight([1, 2, 3], 0);
+    // => [1, 2, 3]
+
+
+# 1-9 dropWhile
+    _.dropWhile(array, [predicate=_.identity])
+    创建一个切片数组，去除array中从起点开始到 predicate 返回假值结束部分。predicate 会传入3个参数： (value, index, array)。
+    var users = [
+        { 'user': 'barney',  'active': false },
+        { 'user': 'fred',    'active': false },
+        { 'user': 'pebbles', 'active': true }
+    ];
+    
+    _.dropWhile(users, function(item) { return !item.active; });
+    // => objects for ['pebbles']
+    
+    _.dropWhile(users, { 'user': 'barney', 'active': false });
+    // => objects for ['fred', 'pebbles']
+    
+    _.dropWhile(users, ['active', false]);
+    // => objects for ['pebbles']
+    
+    _.dropWhile(users, 'active');
+    // => objects for ['barney', 'fred', 'pebbles']
+
+# 1-10 dropRightWhile
+    _.dropRightWhile(array, [predicate=_.identity])
+    创建一个切片数组，去除array中从 predicate 返回假值开始到尾部的部分。predicate 会传入3个参数： (value, index, array)。
+    var users = [
+        { 'user': 'barney',  'active': true },
+        { 'user': 'fred',    'active': false },
+        { 'user': 'pebbles', 'active': false }
+    ];
+    
+    _.dropRightWhile(users, function(item) { return !item.active; });
+    // => objects for ['barney']
+    
+    _.dropRightWhile(users, { 'user': 'pebbles', 'active': false });
+    // => objects for ['barney', 'fred']
+    
+    _.dropRightWhile(users, ['active', false]);
+    // => objects for ['barney']
+    
+    _.dropRightWhile(users, 'active');
+    // => objects for ['barney', 'fred', 'pebbles']   
+# 1-11 fill
+    _.fill(array, value, [start=0], [end=array.length])
+    使用 value 值来填充（替换） array，从start位置开始, 到end位置结束（但不包含end位置）。
+    var users = [
+        { 'user': 'barney',  'active': true },
+        { 'user': 'fred',    'active': false },
+        { 'user': 'pebbles', 'active': false }
+    ];
+    
+    var array = [1, 2, 3];
+    _.fill(array, 'a');
+    console.log(array);
+    // => ['a', 'a', 'a']
+    
+    _.fill(Array(3), 2);
+    // => [2, 2, 2]
+    
+    _.fill([4, 6, 8, 10], '*', 1, 3);
+    // => [4, '*', '*', 10]
+# 1-12 findIndex
+    _.findIndex(array, [predicate=_.identity], [fromIndex=0])
+    该方法类似_.find，区别是该方法返回第一个通过 predicate 判断为真值的元素的索引值（index），而不是元素本身。
+    var users = [
+        { 'user': 'barney',  'active': false },
+        { 'user': 'fred',    'active': false },
+        { 'user': 'pebbles', 'active': true }
+    ];
+    
+    _.findIndex(users, function(o) { return o.user == 'barney'; });
+    // => 0
+    
+    _.findIndex(users, { 'user': 'fred', 'active': false });
+    // => 1
+    
+    _.findIndex(users, ['active', false]);
+    // => 0
+    
+    _.findIndex(users, 'active');
+    // => 2
+# 1-13 findLastIndex
+    _.findLastIndex(array, [predicate=_.identity], [fromIndex=array.length-1])
+    这个方式类似_.findIndex， 区别是它是从右到左的迭代集合array中的元素。
+    
+    var users = [
+        { 'user': 'barney',  'active': true },
+        { 'user': 'fred',    'active': false },
+        { 'user': 'pebbles', 'active': false }
+    ];
+    
+    _.findLastIndex(users, function(o) { return o.user == 'pebbles'; });
+    // => 2
+    
+    _.findLastIndex(users, { 'user': 'barney', 'active': true });
+    // => 0
+    
+    _.findLastIndex(users, ['active', false]);
+    // => 2
+    
+    _.findLastIndex(users, 'active');
+    // => 0
+# 1-14 head
+    _.head(array)
+    这个方式类似_.findIndex， 区别是它是从右到左的迭代集合array中的元素。
+    
+    var users = [
+        { 'user': 'barney',  'active': true },
+        { 'user': 'fred',    'active': false },
+        { 'user': 'pebbles', 'active': false }
+    ];
+    
+    _.head([1, 2, 3]);
+    // => 1
+    
+    _.head([]);
+    // => undefined
+# 1-15 flatten
+    _.flatten(array)
+    减少一级array嵌套深度
+    
+    var users = [
+        { 'user': 'barney',  'active': true },
+        { 'user': 'fred',    'active': false },
+        { 'user': 'pebbles', 'active': false }
+    ];
+    
+    _.flatten([1, [2, [3, [4]], 5]]);
+    // => [1, 2, [3, [4]], 5]
+# 1-16 flattenDeep
+    _.flattenDeep(array)
+    将array递归为一维数组。
+    
+    var users = [
+        { 'user': 'barney',  'active': true },
+        { 'user': 'fred',    'active': false },
+        { 'user': 'pebbles', 'active': false }
+    ];
+    
+    _.flattenDeep([1, [2, [3, [4]], 5]]);
+    // => [1, 2, 3, 4, 5]
+# 1-17 flattenDepth
+    _.flattenDepth(array, [depth=1])
+    根据 depth 递归减少 array 的嵌套层级
+
+    var array = [1, [2, [3, [4]], 5]];
+ 
+    _.flattenDepth(array, 1);
+    // => [1, 2, [3, [4]], 5]
+    
+    _.flattenDepth(array, 2);
+    // => [1, 2, 3, [4], 5]
+# 1-18 fromPairs
+    _.fromPairs(pairs)
+    与_.toPairs正好相反；这个方法返回一个由键值对pairs构成的对象。
+    _.fromPairs([['fred', 30], ['barney', 40]]);
+    // => { 'fred': 30, 'barney': 40 }
+
+# 1-19 indexOf
+    _.indexOf(array, value, [fromIndex=0])
+    使用SameValueZero 等值比较，返回首次 value 在数组array中被找到的 索引值， 如果 fromIndex 为负值，将从数组array尾端索引进行匹配。
+    _.indexOf([1, 2, 1, 2], 2);
+    // => 1
+    
+    _.indexOf([1, 2, 1, 2], 2, 2);
+    // => 3
+# 1-20 initial
+    _.initial(array)
+    获取数组array中除了最后一个元素之外的所有元素（注：去除数组array中的最后一个元素）。
+    _.initial([1, 2, 3]);
+    // => [1, 2]
+# 1-21 intersection
+    _.intersection([arrays])
+    创建唯一值的数组，这个数组包含所有给定数组都包含的元素，使用SameValueZero进行相等性比较。（注：可以理解为给定数组的交集）
+    _.intersection([2, 1], [4, 2], [1, 2]);
+    // => [2]
+# 1-22 intersectionBy
+    _.intersectionBy([arrays], [iteratee=_.identity])
+    这个方法类似_.intersection，区别是它接受一个 iteratee 调用每一个arrays的每个值以产生一个值，通过产生的值进行了比较。结果值是从第一数组中选择。iteratee 会传入一个参数：(value)。
+    _.intersectionBy([2.1, 1.2], [4.3, 2.4], Math.floor);
+    // => [2.1]
+    
+    _.intersectionBy([{ 'x': 1 }], [{ 'x': 2 }, { 'x': 1 }], 'x');
+    // => [{ 'x': 1 }]
+# 1-23 intersectionWith
+    _.intersectionWith([arrays], [comparator])
+    这个方法类似_.intersection，区别是它接受一个 comparator 调用比较arrays中的元素。结果值是从第一数组中选择。comparator 会传入两个参数：(arrVal, othVal)。
+
+    var objects = [{ 'x': 1, 'y': 2 }, { 'x': 2, 'y': 1 }];
+    var others = [{ 'x': 1, 'y': 1 }, { 'x': 1, 'y': 2 }];
+    
+    _.intersectionWith(objects, others, _.isEqual);
+    // => [{ 'x': 1, 'y': 2 }]
+# 1-24 join
+    _.join(array, [separator=','])
+    将 array 中的所有元素转换为由 separator 分隔的字符串。
+    _.join(['a', 'b', 'c'], '~');
+    // => 'a~b~c'
+
+# 1-25 last
+    _.last(array)
+    获取array中的最后一个元素。
+    _.last([1, 2, 3]);
+    // => 3
+# 1-26 lastIndexOf
+    _.lastIndexOf(array, value, [fromIndex=array.length-1])
+    这个方法类似_.indexOf ，区别是它是从右到左遍历array的元素。
+    _.lastIndexOf([1, 2, 1, 2], 2);
+    // => 3
+    
+    // Search from the `fromIndex`.
+    _.lastIndexOf([1, 2, 1, 2], 2, 2);
+    // => 1
+# 1-27 nth
+    _.nth(array, [n=0])
+    获取array数组的第n个元素。如果n为负数，则返回从数组结尾开始的第n个元素。
+    var array = ['a', 'b', 'c', 'd'];
+    
+    _.nth(array, 1);
+    // => 'b'
+    
+    _.nth(array, -2);
+    // => 'c';
+# 1-28 pull
+    _.pull(array, [values])
+    移除数组array中所有和给定值相等的元素，使用SameValueZero 进行全等比较。
+    var array = [1, 2, 3, 1, 2, 3];
+    
+    _.pull(array, 2, 3);
+    console.log(array);
+    // => [1, 1]
+# 1-29 pullAll
+    _.pullAll(array, values)
+    这个方法类似_.pull，区别是这个方法接收一个要移除值的数组。
+    var array = [1, 2, 3, 1, 2, 3];
+    
+    _.pullAll(array, [2, 3]);
+    console.log(array);
+    // => [1, 1]
+# 1-29 pullAllBy
+    _.pullAllBy(array, values, [iteratee=_.identity])
+    这个方法类似于_.pullAll ，区别是这个方法接受一个 iteratee（迭代函数） 调用 array 和 values的每个值以产生一个值，通过产生的值进行了比较。iteratee 会传入一个参数： (value)。
+    
+    var array = [{ 'x': 1 }, { 'x': 2 }, { 'x': 3 }, { 'x': 1 }];
+ 
+    _.pullAllBy(array, [{ 'x': 1 }, { 'x': 3 }], 'x');
+    console.log(array);
+    // => [{ 'x': 2 }]
+# 1-29 pullAllWith
+    _.pullAllWith(array, values, [comparator])
+    这个方法类似于_.pullAll，区别是这个方法接受 comparator 调用array中的元素和values比较。comparator 会传入两个参数：(arrVal, othVal)。
+    var array = [{ 'x': 1, 'y': 2 }, { 'x': 3, 'y': 4 }, { 'x': 5, 'y': 6 }];
+    
+    _.pullAllWith(array, [{ 'x': 3, 'y': 4 }], _.isEqual);
+    console.log(array);
+    // => [{ 'x': 1, 'y': 2 }, { 'x': 5, 'y': 6 }]
+
+# 1-30 pullAt
+    _.pullAt(array, [indexes])
+    根据索引 indexes，移除array中对应的元素，并返回被移除元素的数组。
+    var array = [5, 10, 15, 20];
+    var evens = _.pullAt(array, 1, 3);
+    
+    console.log(array);
+    // => [5, 15]
+    
+    console.log(evens);
+    // => [10, 20]
+# 1-31 remove
+    _.remove(array, [predicate=_.identity])
+    移除数组中predicate（断言）返回为真值的所有元素，并返回移除元素组成的数组。predicate（断言） 会传入3个参数： (value, index, array)。
+
+    var array = [{ x: 1, y: 2 }, { x: 2, y: 1 }];
+    var evens = _.remove(array, function (item) {
+        return item.x == 1
+    });
+
+    console.log(array);
+    // => [1, 3]
+
+    console.log(evens);
+        // => [2, 4]
+# 1-32 reverse
+    _.slice(array, [start=0], [end=array.length])
+    裁剪数组array，从 start 位置开始到end结束，但不包括 end 本身的位置。
+# 1-33 sortedIndex
+    _.sortedIndex(array, value)
+    使用二进制的方式检索来决定 value值 应该插入到数组中 尽可能小的索引位置，以保证array的排序。
+    _.sortedIndex([30, 50], 40);
+    // => 1
+# 1-34 sortedIndexBy
+    _.sortedIndexBy(array, value, [iteratee=_.identity])
+    这个方法类似_.sortedIndex ，除了它接受一个 iteratee （迭代函数），调用每一个数组（array）元素，返回结果和value 值比较来计算排序。iteratee 会传入一个参数：(value)。
+    var objects = [{ 'x': 4 }, { 'x': 5 }];
+ 
+    _.sortedIndexBy(objects, { 'x': 4 }, function(o) { return o.x; });
+    // => 0
+    
+    _.sortedIndexBy(objects, { 'x': 4 }, 'x');
+    // => 0
+# 1-35 sortedIndexOf
+    _.sortedIndexOf(array, value)
+    这个方法类似_.indexOf，除了它是在已经排序的数组array上执行二进制检索。
+    _.sortedIndexOf([4, 5, 5, 5, 6], 5);
+    // => 1
+# 1-36 sortedLastIndex
+    _.sortedLastIndex(array, value)
+    此方法类似于_.sortedIndex，除了 它返回 value值 在 array 中尽可能大的索引位置（index）。
+    _.sortedLastIndex([4, 5, 5, 5, 6], 5);
+    // => 4
+# 1-37 sortedLastIndexBy
+    _.sortedLastIndexBy(array, value, [iteratee=_.identity])
+    这个方法类似_.sortedLastIndex ，除了它接受一个 iteratee （迭代函数），调用每一个数组（array）元素，返回结果和value 值比较来计算排序。iteratee 会传入一个参数：(value)。
+    var objects = [{ 'x': 4 }, { 'x': 5 }];
+ 
+    _.sortedLastIndexBy(objects, { 'x': 4 }, function(o) { return o.x; });
+    // => 1
+    
+    _.sortedLastIndexBy(objects, { 'x': 4 }, 'x');
+    // => 1
+# 1-38 sortedLastIndexOf
+    _.sortedLastIndexOf(array, value)
+    这个方法类似_.lastIndexOf，除了它是在已经排序的数组array上执行二进制检索。
+    _.sortedLastIndexOf([4, 5, 5, 5, 6], 5);
+    // => 3
+# 1-39 sortedUniq
+    _.sortedUniq(array)
+    这个方法类似_.uniq，除了它会优化排序数组。
+    _.sortedUniq([1, 1, 2]);
+    // => [1, 2]
+# 1-40 sortedUniqBy
+   _.sortedUniqBy(array, [iteratee])
+    这个方法类似_.uniqBy，除了它会优化排序数组。
+    _.sortedUniqBy([1.1, 1.2, 2.3, 2.4], Math.floor);
+    // => [1.1, 2.3]
+# 1-41 tail
+    _.tail(array)
+    获取除了array数组第一个元素以外的全部元素。
+    _.tail([1, 2, 3]);
+    // => [2, 3]
+# 1-42 take
+    _.take(array, [n=1])
+    创建一个数组切片，从array数组的起始元素开始提取n个元素。
+    _.take([1, 2, 3]);
+    // => [1]
+    
+    _.take([1, 2, 3], 2);
+    // => [1, 2]
+    
+    _.take([1, 2, 3], 5);
+    // => [1, 2, 3]
+    
+    _.take([1, 2, 3], 0);
+    // => []
+# 1-43 takeRight
+    _.takeRight(array, [n=1])
+    创建一个数组切片，从array数组的最后一个元素开始提取n个元素。
+    _.takeRight([1, 2, 3]);
+    // => [3]
+    
+    _.takeRight([1, 2, 3], 2);
+    // => [2, 3]
+    
+    _.takeRight([1, 2, 3], 5);
+    // => [1, 2, 3]
+    
+    _.takeRight([1, 2, 3], 0);
+    // => []
+# 1-44 takeRightWhile
+    _.takeRightWhile(array, [predicate=_.identity])
+    从array数组的最后一个元素开始提取元素，直到 predicate 返回假值。predicate 会传入三个参数： (value, index, array)。
+
+    var users = [
+        { 'user': 'barney',  'active': true },
+        { 'user': 'fred',    'active': false },
+        { 'user': 'pebbles', 'active': false }
+    ];
+    
+    _.takeRightWhile(users, function(o) { return !o.active; });
+    // => objects for ['fred', 'pebbles']
+    
+    _.takeRightWhile(users, { 'user': 'pebbles', 'active': false });
+    // => objects for ['pebbles']
+    
+    _.takeRightWhile(users, ['active', false]);
+    // => objects for ['fred', 'pebbles']
+    
+    _.takeRightWhile(users, 'active');
+    // => []
+# 1-45 takeWhile
+    _.takeWhile(array, [predicate=_.identity])
+    从array数组的起始元素开始提取元素，，直到 predicate 返回假值。predicate 会传入三个参数： (value, index, array)。
+    
+    var users = [
+        { 'user': 'barney',  'active': false },
+        { 'user': 'fred',    'active': false},
+        { 'user': 'pebbles', 'active': true }
+    ];
+    
+    _.takeWhile(users, function(o) { return !o.active; });
+    // => objects for ['barney', 'fred']
+    
+    _.takeWhile(users, { 'user': 'barney', 'active': false });
+    // => objects for ['barney']
+    
+    _.takeWhile(users, ['active', false]);
+    // => objects for ['barney', 'fred']
+    
+    _.takeWhile(users, 'active');
+    // => []
+# 1-46 union
+    _.union([arrays])
+    创建一个按顺序排列的唯一值的数组。所有给定数组的元素值使用SameValueZero做等值比较。（注： arrays（数组）的并集，按顺序返回，返回数组的元素是唯一的）
+    _.union([2], [1, 2]);
+    // => [2, 1]
+# 1-47 unionBy
+    _.unionBy([arrays], [iteratee=_.identity])
+    这个方法类似_.union ，除了它接受一个 iteratee （迭代函数），调用每一个数组（array）的每个元素以产生唯一性计算的标准。iteratee 会传入一个参数：(value)。
+    _.unionBy([2.1], [1.2, 2.3], Math.floor);
+    // => [2.1, 1.2]
+    
+    _.unionBy([{ 'x': 1 }], [{ 'x': 2 }, { 'x': 1 }], 'x');
+    // => [{ 'x': 1 }, { 'x': 2 }]
+# 1-48 unionWith
+    _.unionWith([arrays], [comparator])
+    这个方法类似_.union， 除了它接受一个 comparator 调用比较arrays数组的每一个元素。 comparator 调用时会传入2个参数： (arrVal, othVal)。
+    var objects = [{ 'x': 1, 'y': 2 }, { 'x': 2, 'y': 1 }];
+    var others = [{ 'x': 1, 'y': 1 }, { 'x': 1, 'y': 2 }];
+    
+    _.unionWith(objects, others, _.isEqual);
+    // => [{ 'x': 1, 'y': 2 }, { 'x': 2, 'y': 1 }, { 'x': 1, 'y': 1 }]
+
+# 1-49 uniq
+    _.uniq(array)
+    创建一个去重后的array数组副本。使用了SameValueZero 做等值比较。只有第一次出现的元素才会被保留。
+    
+    _.uniq([2, 1, 2]);
+    // => [2, 1]
+
+# 1-50 uniqBy
+    _.uniqBy(array, [iteratee=_.identity])
+    这个方法类似_.uniq ，除了它接受一个 iteratee （迭代函数），调用每一个数组（array）的每个元素以产生唯一性计算的标准。iteratee 调用时会传入一个参数：(value)。
+    
+    _.uniqBy([2.1, 1.2, 2.3], Math.floor);
+    // => [2.1, 1.2]
+    
+    // The `_.property` iteratee shorthand.
+    _.uniqBy([{ 'x': 1 }, { 'x': 2 }, { 'x': 1 }], 'x');
+    // => [{ 'x': 1 }, { 'x': 2 }]
+# 1-51 uniqWith
+    _.uniqWith(array, [comparator])
+    这个方法类似_.uniq， 除了它接受一个 comparator 调用比较arrays数组的每一个元素。 comparator 调用时会传入2个参数： (arrVal, othVal)。
+    
+    var objects = [{ 'x': 1, 'y': 2 }, { 'x': 2, 'y': 1 }, { 'x': 1, 'y': 2 }];
+ 
+    _.uniqWith(objects, _.isEqual);
+    // => [{ 'x': 1, 'y': 2 }, { 'x': 2, 'y': 1 }]
+# 1-52 zip
+    _.zip([arrays])
+    创建一个分组元素的数组，数组的第一个元素包含所有给定数组的第一个元素，数组的第二个元素包含所有给定数组的第二个元素，以此类推。
+    
+    _.zip(['fred', 'barney'], [30, 40], [true, false]);
+    // => [['fred', 30, true], ['barney', 40, false]]
+# 1-53 unzip
+    _.unzip(array)
+    这个方法类似于_.zip，除了它接收分组元素的数组，并且创建一个数组，分组元素到打包前的结构。（：返回数组的第一个元素包含所有的输入数组的第一元素，第一个元素包含了所有的输入数组的第二元素，依此类推。）
+    
+    var zipped = _.zip(['fred', 'barney'], [30, 40], [true, false]);
+    // => [['fred', 30, true], ['barney', 40, false]]
+    
+    _.unzip(zipped);
+    // => [['fred', 'barney'], [30, 40], [true, false]]
+# 1-54 unzipWith
+    _.unzipWith(array, [iteratee=_.identity])
+    此方法类似于_.unzip，除了它接受一个iteratee指定重组值应该如何被组合。iteratee 调用时会传入每个分组的值： (...group)。
+    
+    var zipped = _.zip([1, 2], [10, 20], [100, 200]);
+    // => [[1, 10, 100], [2, 20, 200]]
+    
+    _.unzipWith(zipped, _.add);
+    // => [3, 30, 300]
+# 1-55 without
+    _.without(array, [values])
+    创建一个剔除所有给定值的新数组，剔除值的时候，使用SameValueZero做相等比较。
+    
+    _.without([2, 1, 2, 3], 1, 2);
+    // => [3]
+# 1-56 xor
+    _.xor([arrays])
+    创建一个给定数组唯一值的数组，使用symmetric difference做等值比较。返回值的顺序取决于他们数组的出现顺序。
+    
+    _.xor([2, 1], [2, 3]);
+    // => [1, 3]
+# 1-57 xorBy
+    _.xorBy([arrays], [iteratee=_.identity])
+    这个方法类似_.xor ，除了它接受 iteratee（迭代器），这个迭代器 调用每一个 arrays（数组）的每一个值，以生成比较的新值。iteratee 调用一个参数：(value).
+    _.xorBy([2.1, 1.2], [2.3, 3.4], Math.floor);
+    // => [1.2, 3.4]
+    
+    _.xorBy([{ 'x': 1 }], [{ 'x': 2 }, { 'x': 1 }], 'x');
+    // => [{ 'x': 2 }]
+# 1-58 xorWith
+    _.xorWith([arrays], [comparator])
+    该方法是像_.xor，除了它接受一个 comparator ，以调用比较数组的元素。 comparator 调用2个参数：(arrVal, othVal).
+    
+    var objects = [{ 'x': 1, 'y': 2 }, { 'x': 2, 'y': 1 }];
+    var others = [{ 'x': 1, 'y': 1 }, { 'x': 1, 'y': 2 }];
+    
+    _.xorWith(objects, others, _.isEqual);
+    // => [{ 'x': 2, 'y': 1 }, { 'x': 1, 'y': 1 }]
+
+# 1-59 zipObject
+    _.zipObject([props=[]], [values=[]])
+    这个方法类似_.fromPairs，除了它接受2个数组，第一个数组中的值作为属性标识符（属性名），第二个数组中的值作为相应的属性值。
+    
+   _.zipObject(['a', 'b'], [1, 2]);
+    // => { 'a': 1, 'b': 2 }
+# 1-60 zipObjectDeep
+   _.zipObjectDeep([props=[]], [values=[]])
+    这个方法类似_.fromPairs，除了它接受2个数组，第一个数组中的值作为属性标识符（属性名），第二个数组中的值作为相应的属性值。
+    
+   _.zipObjectDeep(['a.b[0].c', 'a.b[1].d'], [1, 2]);
+   // => { 'a': { 'b': [{ 'c': 1 }, { 'd': 2 }] } }
+# 1-61 zipObjectDeep
+    _.zipWith([arrays], [iteratee=_.identity])
+    这个方法类似于_.zip，不同之处在于它接受一个 iteratee（迭代函数），来 指定分组的值应该如何被组合。 该iteratee调用每个组的元素： (...group).
+    
+    _.zipWith([1, 2], [10, 20], [100, 200], function(a, b, c) {
+        return a + b + c;
+    });
+    // => [111, 222]
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
